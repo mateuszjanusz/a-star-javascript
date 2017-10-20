@@ -11,7 +11,7 @@ function Graph(grid){
 		nodes[x] = new Array(row_count)
 		for(let y = 0; y < row_count; ++y){
 			nodes[x][y] = new Node(x, y, row[y])
-			console.log(nodes[x][y])
+			// console.log(nodes[x][y])
 		}
 	}
 

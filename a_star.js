@@ -42,6 +42,17 @@ const a_star = {
 		return neighbours
 	},
 
+	getPath(node) {
+		let curr = node;
+		const path = [];
+		while (curr.parent) {
+			path.unshift(curr)
+			curr = curr.parent
+		}
+
+		return path
+	},
+
 	calcHeuristic(a, b){
 		//calculating manhattan distance
 	 		const d1 = Math.abs(a.x - b.x)
@@ -55,33 +66,35 @@ const a_star = {
 		goal.label = 'GOAL Node'
 		// console.log(grid.nodes)
 		const open_list = []
+
 		open_list.push(start)
 		let closest = start
-		console.log("open list:", open_list)
+		console.log("open list:")
+		console.log(open_list)
 
 		while(open_list.length > 0){
-
 
 			//select the lowest f(x)
 			const lowest_index = a_star.getLowest(open_list)
 
 			const current = open_list[lowest_index]
-			console.log("current", current)
+			console.log("CURRENT")
+			console.log(current)
 			if(current === goal){
 				// return getPath(current) //TO do: write getPath function
 				console.log(">>>>>> found path", current, goal)
-				return
+				return a_star.getPath(current)
 			}
 			console.log("looking for goal..")
 			
 			//move current from open to closed
 			// open_list.remove(lowest_index)
-
 			open_list.shift()
 			current.closed = true
 
 			const neighbours = a_star.getNeighbours(grid, current)
 
+			console.log("NEIGHBOURS")
 			console.log(neighbours)
 			for(let i=0; i < neighbours.length; i++) {
                 const neighbour = neighbours[i]
@@ -98,8 +111,8 @@ const a_star = {
                	let is_closest = false
 
                	const was_visited = neighbour.visited
-               	// neighbour unvisited
-               	if(!was_visited|| g_score < neighbour.g){
+
+               	if(!was_visited || g_score < neighbour.g){
                		is_closest = true
 					
 					neighbour.visited = true
@@ -107,13 +120,18 @@ const a_star = {
                		neighbour.g = g_score
                		neighbour.h = a_star.calcHeuristic(neighbour.pos, goal.pos)
                		neighbour.f = neighbour.g + neighbour.h
-
+               		neighbour.closed = true
                		open_list.push(neighbour)
                	}
 
                	if(is_closest){
                		neighbour.debug = "F: " + neighbour.f + " G: " + neighbour.g + " H: " + neighbour.h
-               		console.log(neighbour.debug)
+               		console.log("IS CLOSEST? :")
+               		console.log('neighbour', neighbour.debug)
+               		console.log("current closest", "F: " + closest.f + " G: " + closest.g + " H: " + closest.h)
+					if(closest === start){
+		              	closest = neighbour
+               		}
                		if (neighbour.h < closest.h || (neighbour.h === closest.h && neighbour.g < closest.g)) {
 	               		console.log("new closest")
 		              	closest = neighbour
@@ -128,9 +146,10 @@ const a_star = {
 
             }
             if(closest){
-				console.log("return path to closest here", closest)
-				console.log("the same as start? ", closest === start)   		
-				return
+            	const shortest_path = a_star.getPath(closest)
+            	console.log("=======DONE=======")
+				console.log("the same as start? ", closest === start)
+				return shortest_path
            	}
 
             return []
