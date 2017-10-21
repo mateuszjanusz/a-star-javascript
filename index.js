@@ -6,19 +6,33 @@ const Graph = require('./graph')
 
 
 const grid = [
-	[1,1,1,1],
-	[0,1,1,0],
-	[0,0,1,1]
+	[1,1,1,1,0,1],
+	[0,1,1,0,0,1],
+	[0,0,1,1,0,1],
+	[0,1,0,1,0,1],
+	[0,1,0,1,0,1]
 ]
 
 const graph = new Graph(grid)
-const start = graph.nodes[0][0]
-const end = graph.nodes[1][2]
+const start = graph.nodes[1][1]
+const goal = graph.nodes[4][1]
+start.label = 'S'
+goal.label = 'G'
 
 console.log("GRAPH")
 console.log(graph.toString())
 
-const result = Astar.search(graph.nodes, start, end)
-console.log(result)
+// console.log("START")
+console.log(start)
+// console.log("GOAL")
+console.log(goal)
+
+const result = Astar.search(graph, start, goal)
+console.log("SHORTEST PATH:")
+// console.log(result)
+_.forEach(result, (node, index)=>{
+	index = index+1
+	console.log('step ' + index, node.pos)
+})
 
 

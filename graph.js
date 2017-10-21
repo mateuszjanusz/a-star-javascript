@@ -4,26 +4,29 @@ function Graph(grid){
 	this.grid = grid
 	const nodes = []
 
-	let row, row_count
-	for(let x = 0; x < grid.length; ++x){
-		row = grid[x]
-		row_count = row.length
-		nodes[x] = new Array(row_count)
-		for(let y = 0; y < row_count; ++y){
-			nodes[x][y] = new Node(x, y, row[y])
-			// console.log(nodes[x][y])
+	let row, col, col_count
+	grid.forEach((row, i) => {
+		col_count = row.length
+		nodes[i] = new Array(row.length)
+		for(let j = 0; j < col_count; j++){
+			nodes[i][j] = new Node(j, i)
 		}
-	}
+	})
 
 	this.nodes = nodes
 }
 
-function Node(x, y, type){
-	this.label = ''
+function Node(x, y){
+	this.label = 'o'
     this.x = x
     this.y = y
     this.pos = {x, y}
-    this.type = type
+	this.f = 0
+	this.g = 0
+	this.h = 0
+	this.closed = false
+	this.parent = null
+    // this.type = type
 }
 
 
@@ -36,7 +39,7 @@ Graph.prototype.toString = function() {
         rowDebug = "";
         row = nodes[x++];
         for (y = 0, l = row.length; y < l;) {
-            rowDebug += row[y++].type + " ";
+            rowDebug += row[y++].label + " ";
         }
         graphString = graphString + rowDebug + "\n";
     }
