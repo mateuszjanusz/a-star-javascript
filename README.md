@@ -15,3 +15,7 @@ yarn
 node index.js
 ```
    **NOTE:** To use diagonal grid, you need to uncomment code in a_star.js
+
+| Square Grid  | Diagonal Grid |
+| ------------- | ------------- |
+| ![](https://github.com/mateuszjanusz/ai-coursework/blob/master/examples/square.png?raw=true)  | ![](https://github.com/mateuszjanusz/ai-coursework/blob/master/examples/diagonal.png?raw=true)  |
