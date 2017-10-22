@@ -35,6 +35,27 @@ const a_star = {
 			neighbours.push(grid[y][x+1])
 		}
 
+	//diagon directions  <-- uncomment for diagonal
+		//north-west
+	    if (grid[x - 1] && grid[x - 1][y - 1]) {
+			neighbours.push(grid[x - 1][y - 1]);
+	    }
+
+	    //north-east
+	    if (grid[x + 1] && grid[x + 1][y - 1]) {
+			neighbours.push(grid[x + 1][y - 1]);
+	    }
+
+	    //south-west
+	    if (grid[x - 1] && grid[x - 1][y + 1]) {
+			neighbours.push(grid[x - 1][y + 1]);
+	    }
+
+	    //south-east
+	    if (grid[x + 1] && grid[x + 1][y + 1]) {
+			neighbours.push(grid[x + 1][y + 1]);
+	    }
+
 		return neighbours
 	},
 
@@ -49,10 +70,23 @@ const a_star = {
 	},
 
 	calcHeuristic(a, b){
-		//calculating manhattan distance
-	 		const d1 = Math.abs(a.x - b.x)
-	        const d2 = Math.abs(a.y - b.y)
+	//calculating manhattan distance
+ 		const d1 = Math.abs(b.x - a.x)
+        const d2 = Math.abs(b.y - a.y)
         return d1 + d2
+    //calculating diagonal distance  <-- uncomment for diagonal
+    	// Chebyshev distance
+		  	// const D1 = 1
+			// const D2 = 1
+			// const d1 = Math.abs(b.x - a.x)
+			// const d2 = Math.abs(b.y - a.y)
+			// return (D1 * (d1 + d2) + (D2 - 2 * D1) * Math.min(d1, d2))
+		//octile distance
+		    //  const D1 = 1
+			// 	const D2 = Math.sqrt(2)
+			// 	const d1 = Math.abs(b.x - a.x)
+			// 	const d2 = Math.abs(b.y - a.y)
+			// 	return (D1 * (d1 + d2)) + ((D2 - (2 * D1)) * Math.min(d1, d2))
 	},
 
 	search: function(graph, start, goal) {
@@ -66,18 +100,16 @@ const a_star = {
 
 			//select the lowest f(x)
 			const lowest_index = a_star.getLowest(open_list)
-
 			const current = open_list[lowest_index]
-			console.log("CURRENT", current.pos)
-
+			console.log("current position:", current.toString())
 
 			// console.log(current)
 			if(current === goal){
 				// return getPath(current) //TO do: write getPath function
-				console.log(">>>>>> found shortest path")
+				console.log(">> Found the shortest path <<")
+				console.log(graph.toString())
 				return a_star.getPath(current)
 			}
-			console.log("looking for goal..")
 
 			//remove current from open and mark as closed closed
 			open_list = _.filter(open_list, (node) => node != current)
@@ -85,8 +117,8 @@ const a_star = {
 
 			const neighbours = a_star.getNeighbours(nodes, current)
 
-			// console.log("NEIGHBOURS")
-			// _.forEach(neighbours, (n) => console.log(n.pos))
+			console.log("Neighbours")
+			_.forEach(neighbours, (n) => console.log(n.toString()))
 
 			for(let i=0; i < neighbours.length; i++) {
                 const neighbour = neighbours[i]
@@ -94,7 +126,6 @@ const a_star = {
                 // if(neighbour.closed || neighbour.isWall()) { 
                 if(neighbour.closed) { 
                     // neighbour was visited, skip to next neighbour
-                    console.log("SKIPPING")
                     continue
                 }
 
@@ -107,7 +138,6 @@ const a_star = {
                	if(!was_visited || g_score < neighbour.g){
                		
                		if(closest != start){
-   						current.label = 'v'
 	               		neighbour.closed = true
                		}
 
@@ -120,16 +150,14 @@ const a_star = {
                	}
 
                	if(is_closest){
-               		neighbour.debug = "F: " + neighbour.f + " G: " + neighbour.g + " H: " + neighbour.h
-               		console.log("IS CLOSEST? :")
-               		console.log('neighbour', neighbour.pos, neighbour.debug)
-               		console.log("current closest", "F: " + closest.f + " G: " + closest.g + " H: " + closest.h)
+               		// neighbour.debug = "F: " + neighbour.f + " G: " + neighbour.g + " H: " + neighbour.h
+               		// console.log("IS CLOSEST? :")
+               		// console.log('neighbour', neighbour.pos, neighbour.debug)
+               		// console.log("current closest", "F: " + closest.f + " G: " + closest.g + " H: " + closest.h)
 					
                		if (neighbour.h < current.h || (neighbour.h === current.h && neighbour.g < current.g)) {
-	               		console.log("new closest")
+	               		console.log("new closest", neighbour.toString())
 		              	closest = neighbour
-               			// closest.label = '*'
-						console.log(graph.toString())
 		            }
                	}
 
@@ -139,10 +167,7 @@ const a_star = {
                		open_list.push(neighbour)
                	} 
 
-
-
-            }
-           
+            }           
 
 		}
 
