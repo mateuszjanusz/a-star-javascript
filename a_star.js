@@ -36,35 +36,33 @@ const a_star = {
 		}
 
 	//diagon directions  <-- uncomment for diagonal
-		//north-west
-	    if (grid[x - 1] && grid[x - 1][y - 1]) {
-			neighbours.push(grid[x - 1][y - 1]);
-	    }
-
-	    //north-east
-	    if (grid[x + 1] && grid[x + 1][y - 1]) {
-			neighbours.push(grid[x + 1][y - 1]);
-	    }
-
-	    //south-west
-	    if (grid[x - 1] && grid[x - 1][y + 1]) {
-			neighbours.push(grid[x - 1][y + 1]);
-	    }
-
-	    //south-east
-	    if (grid[x + 1] && grid[x + 1][y + 1]) {
-			neighbours.push(grid[x + 1][y + 1]);
-	    }
+		// //north-west
+	 //    if (grid[x - 1] && grid[x - 1][y - 1]) {
+		// 	neighbours.push(grid[x - 1][y - 1]);
+	 //    }
+	 //    //north-east
+	 //    if (grid[x + 1] && grid[x + 1][y - 1]) {
+		// 	neighbours.push(grid[x + 1][y - 1]);
+	 //    }
+	 //    //south-west
+	 //    if (grid[x - 1] && grid[x - 1][y + 1]) {
+		// 	neighbours.push(grid[x - 1][y + 1]);
+	 //    }
+	 //    //south-east
+	 //    if (grid[x + 1] && grid[x + 1][y + 1]) {
+		// 	neighbours.push(grid[x + 1][y + 1]);
+	 //    }
 
 		return neighbours
 	},
 
 	getPath(node) {
-		let curr = node;
-		const path = [];
+		let curr = node
+		const path = []
 		while (curr.parent) {
 			path.unshift(curr)
 			curr = curr.parent
+       		curr.label = 'x'
 		}
 		return path
 	},
@@ -74,25 +72,25 @@ const a_star = {
  		const d1 = Math.abs(b.x - a.x)
         const d2 = Math.abs(b.y - a.y)
         return d1 + d2
-    //calculating diagonal distance  <-- uncomment for diagonal
-    	// Chebyshev distance
-		  	// const D1 = 1
-			// const D2 = 1
-			// const d1 = Math.abs(b.x - a.x)
-			// const d2 = Math.abs(b.y - a.y)
-			// return (D1 * (d1 + d2) + (D2 - 2 * D1) * Math.min(d1, d2))
-		//octile distance
-		    //  const D1 = 1
-			// 	const D2 = Math.sqrt(2)
-			// 	const d1 = Math.abs(b.x - a.x)
-			// 	const d2 = Math.abs(b.y - a.y)
-			// 	return (D1 * (d1 + d2)) + ((D2 - (2 * D1)) * Math.min(d1, d2))
+    //calculating diagonal octile distance  <-- uncomment for diagonal
+		// const D1 = 1
+		// const D2 = Math.sqrt(2)
+		// const d1 = Math.abs(b.x - a.x)
+		// const d2 = Math.abs(b.y - a.y)
+		// return (D1 * (d1 + d2)) + ((D2 - (2 * D1)) * Math.min(d1, d2))
 	},
 
 	search: function(graph, start, goal) {
 		const nodes = graph.nodes
+		start.label = 'S'
+		goal.label = 'G'
+		console.log("\nGRAPH")
+		console.log('Goal:', goal.toString())
+		console.log(graph.toString())
+
 		let open_list = []
 
+		console.log("\Starting from initial node:", start.toString(), '\n')
 		open_list.push(start)
 		let closest = start
 
@@ -101,29 +99,26 @@ const a_star = {
 			//select the lowest f(x)
 			const lowest_index = a_star.getLowest(open_list)
 			const current = open_list[lowest_index]
-			console.log("current position:", current.toString())
+			console.log("X Current position:", current.toString())
 
-			// console.log(current)
 			if(current === goal){
-				// return getPath(current) //TO do: write getPath function
-				console.log(">> Found the shortest path <<")
-				console.log(graph.toString())
+				console.log("\n Found the goal!")
 				return a_star.getPath(current)
 			}
 
-			//remove current from open and mark as closed closed
+			//remove current from open and mark node as closed 
 			open_list = _.filter(open_list, (node) => node != current)
 			current.closed = true
 
+			//get current's neighbours
 			const neighbours = a_star.getNeighbours(nodes, current)
 
-			console.log("Neighbours")
-			_.forEach(neighbours, (n) => console.log(n.toString()))
+			console.log("Neighbours", neighbours.length)
+			// _.forEach(neighbours, (n) => console.log(n.toString()))
 
 			for(let i=0; i < neighbours.length; i++) {
                 const neighbour = neighbours[i]
 
-                // if(neighbour.closed || neighbour.isWall()) { 
                 if(neighbour.closed) { 
                     // neighbour was visited, skip to next neighbour
                     continue
@@ -149,35 +144,20 @@ const a_star = {
                		neighbour.f = neighbour.g + neighbour.h
                	}
 
-               	if(is_closest){
-               		// neighbour.debug = "F: " + neighbour.f + " G: " + neighbour.g + " H: " + neighbour.h
-               		// console.log("IS CLOSEST? :")
-               		// console.log('neighbour', neighbour.pos, neighbour.debug)
+               	if(is_closest && (neighbour.h < current.h || (neighbour.h === current.h && neighbour.g < current.g))){
+               		// console.log('neighbour', neighbour.toString())
                		// console.log("current closest", "F: " + closest.f + " G: " + closest.g + " H: " + closest.h)
-					
-               		if (neighbour.h < current.h || (neighbour.h === current.h && neighbour.g < current.g)) {
-	               		console.log("new closest", neighbour.toString())
-		              	closest = neighbour
-		            }
+               		console.log("> New closest", neighbour.toString())
+	              	closest = neighbour
                	}
 
-               	// console.log("was visited", was_visited)
                	if(!was_visited){
-               		// console.log("adding")
                		open_list.push(neighbour)
                	} 
-
             }           
-
 		}
 
-		if(closest && (closest != start)){
-        	const shortest_path = a_star.getPath(closest)
-        	console.log("=======DONE=======")
-			console.log("the same as start? ", closest === start)
-			return shortest_path
-       	}
-
+		//path not found, failed
         return []
 
 	}

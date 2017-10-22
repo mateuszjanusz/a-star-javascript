@@ -1,9 +1,8 @@
 
-//constuctor
+//Graph constuctor
 function Graph(grid){
 	this.grid = grid
 	const nodes = []
-
 	let row, col, col_count
 	grid.forEach((row, i) => {
 		col_count = row.length
@@ -16,38 +15,36 @@ function Graph(grid){
 	this.nodes = nodes
 }
 
+//single Node constructor
 function Node(x, y){
 	this.label = 'o'
     this.x = x
     this.y = y
-    this.pos = {x, y}
 	this.f = 0
 	this.g = 0
 	this.h = 0
 	this.closed = false
 	this.parent = null
-    // this.type = type
 }
 
-
-//////////////////////////////
+// Print functions
 Graph.prototype.toString = function() {
-    var graphString = "\n";
-    var nodes = this.nodes;
-    var rowDebug, row, y, l;
-    for (var x = 0, len = nodes.length; x < len;) {
-        rowDebug = "";
-        row = nodes[x++];
-        for (y = 0, l = row.length; y < l;) {
-            rowDebug += row[y++].label + " ";
+    let graph_string = "\n"
+    const nodes = this.nodes
+    var row_label, row, y
+    for (let x = 0; x < nodes.length; x++) {
+        row_label = "  "
+        row = nodes[x]
+        for (y = 0; y < row.length; y++) {
+            row_label += row[y].label + " "
         }
-        graphString = graphString + rowDebug + "\n";
+        graph_string += row_label + "\n"
     }
-    return graphString;
+    return graph_string
 };
 
 Node.prototype.toString = function() {
-    return "[" + this.x + "," + this.y + "]";
-};
+    return "[" + this.x + "," + this.y + "]"
+}
 
 module.exports = Graph
