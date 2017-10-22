@@ -2,17 +2,6 @@ const _ = require('lodash')
 
 const a_star = {
 
-	getLowest(list){
-		let lowest_index = 0
-
-		for(let i=0; i < list.length; i++) {
-            if(list[i].f < list[lowest_index].f) { 
-            	lowest_index = i
-            }
-        }
-        return lowest_index
-	},
-
 	getNeighbours(grid, node){
 		const neighbours = []
 		const x = node.x
@@ -56,17 +45,6 @@ const a_star = {
 		return neighbours
 	},
 
-	getPath(node) {
-		let curr = node
-		const path = []
-		while (curr.parent) {
-			path.unshift(curr)
-			curr = curr.parent
-       		curr.label = 'x'
-		}
-		return path
-	},
-
 	calcHeuristic(a, b){
 	//calculating manhattan distance
  		const d1 = Math.abs(b.x - a.x)
@@ -79,6 +57,29 @@ const a_star = {
 		// const d2 = Math.abs(b.y - a.y)
 		// return (D1 * (d1 + d2)) + ((D2 - (2 * D1)) * Math.min(d1, d2))
 	},
+
+	getPath(node) {
+		let curr = node
+		const path = []
+		while (curr.parent) {
+			path.unshift(curr)
+			curr = curr.parent
+       		curr.label = 'x'
+		}
+		return path
+	},
+
+	getLowest(list){
+		let lowest_index = 0
+
+		for(let i=0; i < list.length; i++) {
+		    if(list[i].f < list[lowest_index].f) { 
+		    	lowest_index = i
+		    }
+		}
+        return lowest_index
+	},
+
 
 	search: function(graph, start, goal) {
 		const nodes = graph.nodes
@@ -163,6 +164,5 @@ const a_star = {
 	}
 
 }
-
 
 module.exports = a_star
