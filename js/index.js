@@ -1,7 +1,7 @@
 angular.module('astar', [])
    .controller('astarController', function($scope) {
    		$scope.grid_sizes = [[3,3], [4,4], [5,5], [6,6], [7,7], [8,8], [9,9]]
-		$scope.grid_size = [4,4]
+		$scope.grid_size = [6,6]
 
 		$scope.setupGrid = function(grid_size){
 			const num_rows = grid_size[0]
@@ -40,11 +40,8 @@ angular.module('astar', [])
 			$scope.message = ''
 			$scope.path = search($scope.graph, $scope.start_node, $scope.goal_node, $scope.is_diagonal)
 			if(!$scope.path.length){
-				console.log("path not found", $scope.path_not_found)
 				$scope.path_not_found = true
-			} else {
-				$scope.result = 'The shortest distance is' + $scope.path.length 
-			}
+			} 
 		}
 
 		$scope.setObstacle = function(node){
@@ -69,8 +66,5 @@ angular.module('astar', [])
 		}
 
 	
-		
-		
-
 	    
-});
+})

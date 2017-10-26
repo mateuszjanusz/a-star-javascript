@@ -1,12 +1,22 @@
 <html>
     <body ng-app="astar">
         <div class="container" ng-controller="astarController">
-            <div style="margin: 30px; display: inline-block;" >
-                <button ng-if="!path.length && !path_not_found" ng-click="startSearch()">Start Search</button>
-                <button ng-if="path.length || path_not_found" ng-click="setupGrid(grid_size)">Reset</button>
+            <div style="margin: 20px">
+                <p>Implementation of <b>A* Algorithm</b><br> by Mateusz Janusz (mjanu001@gold.ac.uk)</p>
+                <p>Usage:</p>
+                <ul>
+                    <li>Set a grid size</li>
+                    <li>Choose a grid type</li>
+                    <li>Select start and goal node</li>
+                    <li>Create obstacles by clicking on nodes</li>
+                    <li>Press Start Search to run the algorithm</li>
+                </ul>
+            </div>
+            <div style="margin: 30px; display: inline-block;">
+                
                 <p>Grid size</p>
                 <select style="margin: 10px" 
-                        ng-init="grid_size = grid_sizes[1]"
+                        ng-init="grid_size = grid_sizes[3]"
                         ng-model="grid_size" 
                         ng-options="option as formatSize(option) for option in grid_sizes" 
                         ng-change="updateGridSize()">            
@@ -14,8 +24,8 @@
 
                 <p>Grid type</p>
                 <form>
-                  <input type="radio" ng-model="is_diagonal" ng-value="false" checked>Square<br>
-                  <input type="radio" ng-model="is_diagonal" ng-value="true">Diagonal<br>
+                  <input type="radio" ng-model="is_diagonal" ng-value="false" checked> Square<br>
+                  <input type="radio" ng-model="is_diagonal" ng-value="true"> Diagonal<br>
                 </form>
 
                 <p>Start Node:</p>
@@ -24,7 +34,8 @@
                 <p>Goal Node:</p>
                 <select style="margin: 10px" ng-model="goal_node" ng-options="node as node.display for node in all_nodes"></select>
     
-            
+                <button ng-if="!path.length && !path_not_found" ng-click="startSearch()">Start Search</button>
+                <button ng-if="path.length || path_not_found" ng-click="setupGrid(grid_size)">Reset</button>
             </div>
             <div class="grid">
                 <div class="row" ng-repeat="row in graph.nodes">
@@ -37,8 +48,8 @@
                 </div>
             </div>
 
-            <p style="margin-left: 20px; color: red" ng-show="path_not_found">Path not found</p>
-            <p style="margin-left: 20px;" ng-show="start_is_goal">The goal is the same as the start node. Choose different goal.</p>
+            <p style="margin-left: 20px; color: red" ng-show="path_not_found">Path not found.. Please try again.</p>
+            <p style="margin-left: 20px;" ng-show="start_is_goal">The goal is the same as the start node. Choose a different goal.</p>
 
         </div>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
@@ -70,30 +81,39 @@
         width: 30px;
         height: 30px;
         border: solid 1px;
+        background-color: lightgrey;
     }
     .obstacle {
-        background-color: red;
+        background-color: brown;
     }
     .start-node {
-        background-color: green;
+        background-color: white;
     }
     .goal-node {
+        background-color: white;
         background-image: linear-gradient(45deg, #000000 25%, transparent 25%), linear-gradient(-45deg, #000000 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #000000 75%), linear-gradient(-45deg, transparent 75%, #000000 75%);
         background-size: 20px 20px;
         background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
     }
     .path-node{
-        background-color: yellow;
+        background-color: green;
     }
     p {
         color: gray;
+        margin: 5px;
+    } 
+    li {
+        color: gray;
+    }
+    form {
+        margin: 10px;
     }
     button {
         margin: 10px;
         width: 100px;
         height: 30px;
         border-radius: 5px;
-        background-color: white
+        background-color: white;
     }
 
 </style>
