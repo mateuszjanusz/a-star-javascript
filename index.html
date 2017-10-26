@@ -1,34 +1,51 @@
 <html>
     <body ng-app="astar">
         <div class="container" ng-controller="astarController">
-            <div style="margin: 30px">
-                <p>Start Node:</p>
-                <select style="margin: 10px" ng-model="start_node" ng-options="node as node.display for node in all_nodes"></select>
-                <p>Goal Node:</p>
-                <select style="margin: 10px" ng-model="goal_node" ng-options="node as node.display for node in all_nodes"></select>
-                <p>Type of grid</p>
+            <div style="margin: 30px; display: inline-block;" >
+                <button ng-if="!path.length && !path_not_found" ng-click="startSearch()">Start Search</button>
+                <button ng-if="path.length || path_not_found" ng-click="setupGrid(grid_size)">Reset</button>
+                <p>Grid size</p>
+                <select style="margin: 10px" 
+                        ng-init="grid_size = grid_sizes[1]"
+                        ng-model="grid_size" 
+                        ng-options="option as formatSize(option) for option in grid_sizes" 
+                        ng-change="updateGridSize()">            
+                </select>
+
+                <p>Grid type</p>
                 <form>
                   <input type="radio" ng-model="is_diagonal" ng-value="false" checked>Square<br>
                   <input type="radio" ng-model="is_diagonal" ng-value="true">Diagonal<br>
                 </form>
-                <button ng-if="!path.length" ng-click="startSearch()">Start Search</button>
-                <button ng-if="path.length" ng-click="setupGrid()">Reset</button>
+
+                <p>Start Node:</p>
+                <select style="margin: 10px" ng-model="start_node" ng-options="node as node.display for node in all_nodes"></select>
+
+                <p>Goal Node:</p>
+                <select style="margin: 10px" ng-model="goal_node" ng-options="node as node.display for node in all_nodes"></select>
+    
+            
             </div>
             <div class="grid">
                 <div class="row" ng-repeat="row in graph.nodes">
-                    {{$index}}
                     <div 
                         class="node" 
-                        ng-repeat="node in row" 
-                        ng-class="{'start-node': isStartNode(node), 'goal-node': isGoalNode(node), 'path-node': isPathNode(node)}">    
+                        ng-repeat="node in row"
+                        ng-click="setObstacle(node)" 
+                        ng-class="{'obstacle': isObstacle(node), 'start-node': isStartNode(node), 'goal-node': isGoalNode(node), 'path-node': isPathNode(node)}">    
                     </div>
                 </div>
             </div>
-          
+
+            <p style="margin-left: 20px; color: red" ng-show="path_not_found">Path not found</p>
+            <p style="margin-left: 20px;" ng-show="start_is_goal">The goal is the same as the start node. Choose different goal.</p>
+
         </div>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js"></script>
-        <script src="./controller.js"></script>
+        <script src="./js/index.js"></script>
+        <script src="./js/graph.js"></script>
+        <script src="./js/a_star.js"></script>
     </body>
 </html>
 
@@ -38,8 +55,9 @@
         width: 100%;
     }
     .grid {
-        height: 600px;
-        width: 600px;
+        padding: 10px;
+        display: inline-block;
+
     }
     .row {
         height: 30px;
@@ -52,6 +70,9 @@
         width: 30px;
         height: 30px;
         border: solid 1px;
+    }
+    .obstacle {
+        background-color: red;
     }
     .start-node {
         background-color: green;
@@ -68,7 +89,7 @@
         color: gray;
     }
     button {
-        margin: 20px;
+        margin: 10px;
         width: 100px;
         height: 30px;
         border-radius: 5px;
