@@ -1,6 +1,6 @@
 const _ = require('lodash')
-const Astar = require('./a_star')
-const Graph = require('./graph')
+const Astar = require('./src/a_star')
+const Graph = require('./src/graph')
 
 const grid = [
 /*  |0|1|2|3|4|5| */

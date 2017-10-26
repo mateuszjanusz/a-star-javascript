@@ -24,7 +24,7 @@ const a_star = {
 			neighbours.push(grid[y][x+1])
 		}
 
-	//diagon directions  <-- uncomment for diagonal
+	//diagonal directions  								<-- uncomment for diagonal
 		// //north-west
 	 //    if (grid[x - 1] && grid[x - 1][y - 1]) {
 		// 	neighbours.push(grid[x - 1][y - 1]);
@@ -50,7 +50,7 @@ const a_star = {
  		const d1 = Math.abs(b.x - a.x)
         const d2 = Math.abs(b.y - a.y)
         return d1 + d2
-    //calculating diagonal octile distance  <-- uncomment for diagonal
+    //calculating diagonal octile distance  			<-- uncomment for diagonal
 		// const D1 = 1
 		// const D2 = Math.sqrt(2)
 		// const d1 = Math.abs(b.x - a.x)

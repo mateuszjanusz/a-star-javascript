@@ -1,0 +1,78 @@
+<html>
+    <body ng-app="astar">
+        <div class="container" ng-controller="astarController">
+            <div style="margin: 30px">
+                <p>Start Node:</p>
+                <select style="margin: 10px" ng-model="start_node" ng-options="node as node.display for node in all_nodes"></select>
+                <p>Goal Node:</p>
+                <select style="margin: 10px" ng-model="goal_node" ng-options="node as node.display for node in all_nodes"></select>
+                <p>Type of grid</p>
+                <form>
+                  <input type="radio" ng-model="is_diagonal" ng-value="false" checked>Square<br>
+                  <input type="radio" ng-model="is_diagonal" ng-value="true">Diagonal<br>
+                </form>
+                <button ng-if="!path.length" ng-click="startSearch()">Start Search</button>
+                <button ng-if="path.length" ng-click="setupGrid()">Reset</button>
+            </div>
+            <div class="grid">
+                <div class="row" ng-repeat="row in graph.nodes">
+                    {{$index}}
+                    <div 
+                        class="node" 
+                        ng-repeat="node in row" 
+                        ng-class="{'start-node': isStartNode(node), 'goal-node': isGoalNode(node), 'path-node': isPathNode(node)}">    
+                    </div>
+                </div>
+            </div>
+          
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js"></script>
+        <script src="./controller.js"></script>
+    </body>
+</html>
+
+<style>
+    .container {
+        margin: auto;
+        width: 100%;
+    }
+    .grid {
+        height: 600px;
+        width: 600px;
+    }
+    .row {
+        height: 30px;
+        margin: 10px;
+
+    }
+    .node {
+        display: inline-block;
+        margin: 5px;
+        width: 30px;
+        height: 30px;
+        border: solid 1px;
+    }
+    .start-node {
+        background-color: green;
+    }
+    .goal-node {
+        background-image: linear-gradient(45deg, #000000 25%, transparent 25%), linear-gradient(-45deg, #000000 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #000000 75%), linear-gradient(-45deg, transparent 75%, #000000 75%);
+        background-size: 20px 20px;
+        background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    }
+    .path-node{
+        background-color: yellow;
+    }
+    p {
+        color: gray;
+    }
+    button {
+        margin: 20px;
+        width: 100px;
+        height: 30px;
+        border-radius: 5px;
+        background-color: white
+    }
+
+</style>
