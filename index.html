@@ -1,10 +1,14 @@
 <html>
+    <head>
+        <title>A* (Mateusz Janusz 2017)</title>
+    </head>
     <body ng-app="astar">
         <div class="container" ng-controller="astarController">
             <div style="margin: 20px">
-                <p>Implementation of <b>A* Algorithm</b><br> by Mateusz Janusz (mjanu001@gold.ac.uk)</p>
+                <h4>A* Search Algorithm</h4>
+                <p style="margin-bottom: 20px;">Mateusz Janusz (mjanu001@gold.ac.uk)</p>
                 <p>Usage:</p>
-                <ul>
+                <ul style="margin-top: 1px">
                     <li>Set a grid size</li>
                     <li>Choose a grid type</li>
                     <li>Select start and goal node</li>
@@ -23,7 +27,7 @@
                 </select>
 
                 <p>Grid type</p>
-                <form>
+                <form style="font-size: 13px">
                   <input type="radio" ng-model="is_diagonal" ng-value="false" checked> Square<br>
                   <input type="radio" ng-model="is_diagonal" ng-value="true"> Diagonal<br>
                 </form>
@@ -61,14 +65,16 @@
 </html>
 
 <style>
+    body {
+        font-family: monospace;
+        margin: 20px;
+    }
     .container {
         margin: auto;
         width: 100%;
     }
     .grid {
-        padding: 10px;
         display: inline-block;
-
     }
     .row {
         height: 30px;
@@ -81,6 +87,7 @@
         width: 30px;
         height: 30px;
         border: solid 1px;
+        border-radius: 2px;
         background-color: lightgrey;
     }
     .obstacle {
@@ -98,22 +105,33 @@
     .path-node{
         background-color: green;
     }
+    h4 {
+        margin: 5px;
+    }
     p {
-        color: gray;
         margin: 5px;
     } 
     li {
-        color: gray;
+
     }
     form {
         margin: 10px;
     }
+    select {
+        width: 50px;
+        height: 20px;
+        border: 1px solid gray;
+        background-color: white;
+    }
     button {
-        margin: 10px;
+        margin-left: 5px;
+        margin-top: 35px;
         width: 100px;
         height: 30px;
-        border-radius: 5px;
+        border-radius: 4px;
+        border: 1px solid gray;
         background-color: white;
+        display: block;
     }
 
 </style>
