@@ -56,6 +56,12 @@
             <p style="margin-left: 20px;" ng-show="start_is_goal">The goal is the same as the start node. Choose a different goal.</p>
 
         </div>
+        <div style="margin-left: 30px">
+            <div class="node start-node"></div><span>start node</span>
+            <div class="node goal-node"></div><span>goal node</span>
+            <div class="node obstacle"></div><span>obstacle</span>
+            <div class="node path-node"></div><span>path</span>
+        </div>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js"></script>
         <script src="./js/index.js"></script>
@@ -124,10 +130,11 @@
         background-color: white;
     }
     button {
+        padding: 3px;
         margin-left: 5px;
-        margin-top: 35px;
+        margin-top: 15px;
         width: 100px;
-        height: 30px;
+        min-height: 30px;
         border-radius: 4px;
         border: 1px solid gray;
         background-color: white;
