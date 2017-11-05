@@ -1,5 +1,74 @@
 
-function search(graph, start, goal, is_diagonal) {
+function dijkstra(graph, start, goal, is_diagonal) {
+
+	const nodes = graph.nodes
+
+	let open_list = []
+
+	open_list.push(start)
+	let closest = start
+
+	while(open_list.length > 0){
+
+
+		const current = open_list[open_list.length-1]
+		// console.log("X Current position:", current.toString())
+
+		if(current === goal){
+			// console.log("\n Found the goal!")
+			return getPath(current)
+		}
+
+		//remove current from open and mark node as closed 
+		open_list = _.filter(open_list, (node) => node != current)
+		current.closed = true
+
+		//get current's neighbours
+		const neighbours = getNeighbours(nodes, current, is_diagonal)
+		// console.log(neighbours)
+		for(let i=0; i < neighbours.length; i++) {
+            const neighbour = neighbours[i]
+
+            if(neighbour.closed) { 
+                // neighbour was visited, skip to next neighbour
+                continue
+            }
+
+            // calculate g score
+           	const g_score = current.g + 1 // 1 is the distance from current node to its neighbour
+           	let is_closest = false
+
+           	const was_visited = neighbour.closed
+
+           	if(!was_visited || g_score < neighbour.g){
+           		
+           		if(closest != start){
+               		neighbour.closed = true
+           		}
+
+           		is_closest = true
+				
+           		neighbour.parent = current
+           		neighbour.g = g_score
+           	}
+
+           	if(is_closest && (neighbour.g < current.g)){
+              	closest = neighbour
+           	}
+
+           	if(!was_visited){
+           		open_list.push(neighbour)
+           	} 
+        }     
+
+	}
+	//path not found, failed
+    return []
+
+}
+
+
+function aStar(graph, start, goal, is_diagonal) {
 
 	const nodes = graph.nodes
 
@@ -69,6 +138,7 @@ function search(graph, start, goal, is_diagonal) {
     return []
 
 }
+
 
 function isObstacle(node){
 	return node.is_obstacle

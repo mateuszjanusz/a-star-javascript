@@ -15,6 +15,10 @@ Given starting point and a goal, the algorithm for each move, examines the verte
 6. Create obstacles by clicking on nodes
 7. Press Start Search to run the algorithm
 
+
+or try it [here](http://doc.gold.ac.uk/~mjanu001/ai/index.html).
+
+
 ## Example
 Green squares represent the shortest path found by the algorithm.
 

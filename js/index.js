@@ -22,6 +22,7 @@ angular.module('astar', [])
 			$scope.path = []
 			$scope.error = ''
 			$scope.result = ''
+			$scope.is_dijkstra = false
 		}
 
 
@@ -38,7 +39,12 @@ angular.module('astar', [])
 				return
 			}
 			$scope.message = ''
-			$scope.path = search($scope.graph, $scope.start_node, $scope.goal_node, $scope.is_diagonal)
+			if($scope.is_dijkstra){
+				$scope.path = dijkstra($scope.graph, $scope.start_node, $scope.goal_node, $scope.is_diagonal)
+			} else {
+				$scope.path = aStar($scope.graph, $scope.start_node, $scope.goal_node, $scope.is_diagonal)
+
+			}
 			if(!$scope.path.length){
 				$scope.path_not_found = true
 			} 
