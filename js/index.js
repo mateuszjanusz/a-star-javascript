@@ -13,21 +13,32 @@ angular.module('astar', [])
 			}
 
 			$scope.graph = new Graph(grid)
+
 			$scope.all_nodes = _.flatten($scope.graph.nodes)
 			$scope.start_node = $scope.all_nodes[0]
 			$scope.goal_node = $scope.all_nodes[$scope.all_nodes.length-1]
-			$scope.is_diagonal = false
+			$scope.is_diagonal = true
 			$scope.path_not_found = false
 			$scope.start_is_goal = false
 			$scope.path = []
 			$scope.error = ''
 			$scope.result = ''
 			$scope.is_dijkstra = false
+
+			setRandomObstacles($scope.all_nodes, num_rows)
 		}
 
 
 
 		$scope.setupGrid($scope.grid_size)
+
+		function setRandomObstacles(nodes, num_rows){
+			const num_nodes = nodes.length
+			for(let i = 0; i < num_rows; i++) {
+				const random_index = Math.round(Math.random() * (num_nodes - 1))
+				nodes[random_index].is_obstacle = true
+			}
+		}
 		
 		$scope.updateGridSize = function(){
 			$scope.setupGrid($scope.grid_size)

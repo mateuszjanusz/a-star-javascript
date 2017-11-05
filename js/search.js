@@ -1,4 +1,5 @@
 
+// Dijsktra Algorithm 
 function dijkstra(graph, start, goal, is_diagonal) {
 
 	const nodes = graph.nodes
@@ -67,19 +68,21 @@ function dijkstra(graph, start, goal, is_diagonal) {
 
 }
 
-
+// A* Algorithm
 function aStar(graph, start, goal, is_diagonal) {
 
 	const nodes = graph.nodes
 
+	// initialize empty open list
 	let open_list = []
 
+	// add start node to the open list and set it initially as closest node 
 	open_list.push(start)
 	let closest = start
 
 	while(open_list.length > 0){
 
-		//select the lowest f(x)
+		//select node with the lowest f(x)
 		const lowest_index = getLowest(open_list)
 		const current = open_list[lowest_index]
 		// console.log("X Current position:", current.toString())
@@ -89,23 +92,24 @@ function aStar(graph, start, goal, is_diagonal) {
 			return getPath(current)
 		}
 
-		//remove current from open and mark node as closed 
+		//remove current from open and mark node as visited 
 		open_list = _.filter(open_list, (node) => node != current)
 		current.closed = true
 
-		//get current's neighbours
+		//get all neighbours
 		const neighbours = getNeighbours(nodes, current, is_diagonal)
 		// console.log(neighbours)
 		for(let i=0; i < neighbours.length; i++) {
             const neighbour = neighbours[i]
 
+            //check if neighbour has been visited
             if(neighbour.closed) { 
                 // neighbour was visited, skip to next neighbour
                 continue
             }
 
             // calculate g score
-           	const g_score = current.g + 1 // 1 is the distance from current node to its neighbour
+           	const g_score = current.g + 1 	// 1 is the distance from current node to its neighbour
            	let is_closest = false
 
            	const was_visited = neighbour.closed
@@ -120,10 +124,11 @@ function aStar(graph, start, goal, is_diagonal) {
 				
            		neighbour.parent = current
            		neighbour.g = g_score
-           		neighbour.h = calcHeuristic(neighbour, goal, is_diagonal)
-           		neighbour.f = neighbour.g + neighbour.h
+           		neighbour.h = calcHeuristic(neighbour, goal, is_diagonal) 	// calculate heuristic distance
+           		neighbour.f = neighbour.g + neighbour.h 	// calculate f(x)
            	}
 
+           	// check if the node is new closest
            	if(is_closest && (neighbour.h < current.h || (neighbour.h === current.h && neighbour.g < current.g))){
               	closest = neighbour
            	}
@@ -139,16 +144,18 @@ function aStar(graph, start, goal, is_diagonal) {
 
 }
 
-
+// check if a node is an obstacle
 function isObstacle(node){
 	return node.is_obstacle
 }
 
+// get all neighbours for a node
 function getNeighbours(grid, node, is_diagonal){
 	const neighbours = []
 	const x = node.x
 	const y = node.y
 
+// square grid (4 directions)
 	//west
 	if(grid[x-1] && grid[x-1][y] && !isObstacle(grid[x-1][y])){
 		neighbours.push(grid[x-1][y])
@@ -166,38 +173,40 @@ function getNeighbours(grid, node, is_diagonal){
 		neighbours.push(grid[x][y+1])
 	}
 
-//diagonal directions  								
-if(is_diagonal){
-	//north-west
-    if (grid[x - 1] && grid[x - 1][y - 1] && !isObstacle(grid[x - 1][y - 1])) {
-		neighbours.push(grid[x - 1][y - 1]);
-    }
-    //north-east
-    if (grid[x + 1] && grid[x + 1][y - 1] && !isObstacle(grid[x + 1][y - 1])) {
-		neighbours.push(grid[x + 1][y - 1]);
-    }
-    //south-west
-    if (grid[x - 1] && grid[x - 1][y + 1] && !isObstacle(grid[x - 1][y + 1])) {
-		neighbours.push(grid[x - 1][y + 1]);
-    }
-    //south-east
-    if (grid[x + 1] && grid[x + 1][y + 1] && !isObstacle(grid[x + 1][y + 1])) {
-		neighbours.push(grid[x + 1][y + 1]);
-    }
-}
+//diagonal directions (additional 4 directions) 								
+	if(is_diagonal){
+		//north-west
+	    if (grid[x - 1] && grid[x - 1][y - 1] && !isObstacle(grid[x - 1][y - 1])) {
+			neighbours.push(grid[x - 1][y - 1]);
+	    }
+	    //north-east
+	    if (grid[x + 1] && grid[x + 1][y - 1] && !isObstacle(grid[x + 1][y - 1])) {
+			neighbours.push(grid[x + 1][y - 1]);
+	    }
+	    //south-west
+	    if (grid[x - 1] && grid[x - 1][y + 1] && !isObstacle(grid[x - 1][y + 1])) {
+			neighbours.push(grid[x - 1][y + 1]);
+	    }
+	    //south-east
+	    if (grid[x + 1] && grid[x + 1][y + 1] && !isObstacle(grid[x + 1][y + 1])) {
+			neighbours.push(grid[x + 1][y + 1]);
+	    }
+	}
 
 	return neighbours
 }
 
+
+// calculate heuristic distance
 function calcHeuristic(a, b, is_diagonal){
-//calculating manhattan distance
+// manhattan distance
 if(!is_diagonal){
 	const d1 = Math.abs(b.x - a.x)
     const d2 = Math.abs(b.y - a.y)
     return d1 + d2
 }
 		
-//calculating diagonal octile distance 
+// diagonal (octile) distance 
 	const D1 = 1
 	const D2 = Math.sqrt(2)
 	const d1 = Math.abs(b.x - a.x)
@@ -205,6 +214,7 @@ if(!is_diagonal){
 	return (D1 * (d1 + d2)) + ((D2 - (2 * D1)) * Math.min(d1, d2))
 }
 
+// construct new path for the node from its precursors  
 function getPath(node) {
 	let curr = node
 	const path = []
@@ -215,6 +225,7 @@ function getPath(node) {
 	return path
 }
 
+// get an index of a node with the lowest f(x)
 function getLowest(list){
 	let lowest_index = 0
 
